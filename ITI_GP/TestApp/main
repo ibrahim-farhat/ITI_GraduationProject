@@ -1,0 +1,117 @@
+#include "../Common/STD_TYPES.h"
+#include "../Common/DEFINES.h"
+#include "../Common/BIT_MATH.h"
+
+#include "../Data_Structures/Queue/queue.h"
+#include "../SERL/FIR/Header/FIR_interface.h"
+
+#include "../MCAL/GIE/Header/GIE_interface.h"
+#include "../MCAL/DIO/Header/DIO_interface.h"
+#include "../MCAL/ADC/Header/ADC_interface.h"
+#include "../MCAL/PORT/Header/PORT_interface.h"
+
+#include "../HAL/CLCD/Header/CLCD_interface.h"
+#include "../HAL/LDR/Header/LDR_interface.h"
+#include "../HAL/LM35/Header/LM35_interface.h"
+#include "../HAL/ULTSONIC/Header/ULTSONIC_interface.h"
+
+#include "util/delay.h"
+
+#define MAIN_LDR_1_QUEUE_SIZE		10u
+#define MAIN_LDR_2_QUEUE_SIZE		10u
+#define ALPHA	0.2
+
+sint32 MAIN_s32EMA(sint32 Copy_s32NewValue, sint32 Copy_s32OldValue)
+{
+	return ALPHA * Copy_s32NewValue + (1 - ALPHA) * Copy_s32OldValue;
+}
+
+void main(void)
+{
+	/*Initializations*/
+	PORT_voidInit();
+	GIE_voidEnable();
+	CLCD_voidInit();
+	ADC_voidInit();
+
+	/*Define variables*/
+	uint16 Local_u8LDR0;
+	uint16 Local_u8LDR1;
+	uint8 Local_u8Temp0;
+	uint8 Local_u8Temp1;
+	uint16 Local_u16Distance0;
+	uint8 Local_u8Counter;
+
+	/*Define an array to act as a queue to carry readings from first LDR sensor*/
+	sint32 Local_s32LDR1Queue[MAIN_LDR_1_QUEUE_SIZE];
+	sint32 Local_s32LDR1QueueFront;
+	sint32 Local_s32LDR1QueueRear;
+	sint32 Local_s32LDR1Temp = 0;
+	Queue_voidCircularArrayQueueInit(&Local_s32LDR1QueueFront, &Local_s32LDR1QueueRear);
+
+	/*Define an array to act as a queue to carry readings from second LDR sensor*/
+	sint32 Local_s32LDR2Queue[MAIN_LDR_2_QUEUE_SIZE];
+	sint32 Local_s32LDR2QueueFront;
+	sint32 Local_s32LDR2QueueRear;
+	sint32 Local_s32LDR2Temp = 0;
+	Queue_voidCircularArrayQueueInit(&Local_s32LDR2QueueFront, &Local_s32LDR2QueueRear);
+
+	FIR_Filter_t Local_stFilter = {
+			.ImpulseRespone = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
+	};
+
+	FIR_voidFilterInit(&Local_stFilter);
+	FIR_f32FilterUpdate(&Local_stFilter, 0);
+//	Local_stFilter.ImpulseRespone
+//	for(Local_u8Counter = 0; Local_u8Counter < MAIN_LDR_1_QUEUE_SIZE; Local_u8Counter++)
+//	{
+//		LDR_u8GetAnalogVolt(LDR_u8ADC_CH0, &Local_u8LDR0);
+//		LDR_u8GetAnalogVolt(LDR_u8ADC_CH1, &Local_u8LDR1);
+//		Queue_voidCircularArrayQueueDequeueEnqueue(&Local_s32LDR1QueueFront, &Local_s32LDR1QueueRear, MAIN_LDR_1_QUEUE_SIZE, Local_s32LDR1Queue, Local_u8LDR0);
+//		Queue_voidCircularArrayQueueDequeueEnqueue(&Local_s32LDR2QueueFront, &Local_s32LDR2QueueRear, MAIN_LDR_2_QUEUE_SIZE, Local_s32LDR2Queue, Local_u8LDR1);
+//	}
+
+
+	while(1)
+	{
+//		CLCD_voidClearDisplay();
+//		LDR_u8GetAnalogVolt(LDR_u8ADC_CH0, &Local_u8LDR0);
+//		LDR_u8GetAnalogVolt(LDR_u8ADC_CH1, &Local_u8LDR1);
+//		Queue_voidCircularArrayQueueDequeueEnqueue(&Local_s32LDR1QueueFront, &Local_s32LDR1QueueRear, MAIN_LDR_1_QUEUE_SIZE, Local_s32LDR1Queue, Local_u8LDR0);
+//		Queue_voidCircularArrayQueueDequeueEnqueue(&Local_s32LDR2QueueFront, &Local_s32LDR2QueueRear, MAIN_LDR_2_QUEUE_SIZE, Local_s32LDR2Queue, Local_u8LDR1);
+//
+//		Local_s32LDR1Temp = MAIN_s32EMA(Local_u8LDR0, Local_s32LDR1Temp);
+//		Local_s32LDR2Temp = MAIN_s32EMA(Local_u8LDR1, Local_s32LDR2Temp);
+//
+//		CLCD_u8GoToXY(0, 0);
+//		CLCD_voidSendDecimalNumber(Local_s32LDR1Temp);
+//		CLCD_u8GoToXY(0, 1);
+//		CLCD_voidSendDecimalNumber(Local_s32LDR2Temp);
+//
+////		CLCD_u8GoToXY(12, 0);
+////		CLCD_voidSendDecimalNumber(Local_u16Distance0);
+//
+//
+//		CLCD_u8GoToXY(8, 0);
+//		CLCD_voidSendDecimalNumber(Local_u8LDR0);
+//		CLCD_u8GoToXY(8, 1);
+//		CLCD_voidSendDecimalNumber(Local_u8LDR1);
+//
+//		_delay_ms(500);
+//
+////		_delay_ms(500);
+	}
+}
+//	ULTSONIC_t Local_stUltrasonic0 =
+//	{
+//			.TrigPort = DIO_u8PORTC,
+//			.TrigPin = DIO_u8PIN0
+//	};
+//		ULTSONIC_u8MeasureDistance(&Local_stUltrasonic0, &Local_u16Distance0);
+
+//		LM35_u8GetTemp(LM35_u8ADC_CH6, &Local_u8Temp0);
+//		LM35_u8GetTemp(LM35_u8ADC_CH7, &Local_u8Temp1);
+//		CLCD_u8GoToXY(8, 0);
+//		CLCD_voidSendDecimalNumber(Local_u8Temp0);
+//		CLCD_u8GoToXY(8, 1);
+//		CLCD_voidSendDecimalNumber(Local_u8Temp1);

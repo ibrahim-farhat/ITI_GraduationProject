@@ -1,0 +1,248 @@
+#include "../Common/STD_TYPES.h"
+#include "../Common/DEFINES.h"
+#include "../Common/BIT_MATH.h"
+
+#include "../Data_Structures/Queue/queue.h"
+#include "../SERL/FIR/Header/FIR_interface.h"
+
+#include "../MCAL/GIE/Header/GIE_interface.h"
+#include "../MCAL/DIO/Header/DIO_interface.h"
+#include "../MCAL/ADC/Header/ADC_interface.h"
+#include "../MCAL/PORT/Header/PORT_interface.h"
+#include "../MCAL/TIMERS/Header/TIMERS_interface.h"
+
+#include "../HAL/CLCD/Header/CLCD_interface.h"
+#include "../HAL/LDR/Header/LDR_interface.h"
+#include "../HAL/LM35/Header/LM35_interface.h"
+#include "../HAL/ULTSONIC/Header/ULTSONIC_interface.h"
+
+#include "util/delay.h"
+#include "stdio.h"
+
+void Main_voidTimer1ISR(void);
+
+/*Define the LDR 0 filter*/
+FIR_Filter_t Main_stLDR0Filter = {
+		.ImpulseRespone = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
+};
+
+/*Define the LDR 1 filter*/
+FIR_Filter_t Main_stLDR1Filter = {
+		.ImpulseRespone = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
+};
+
+/*Define the LDR 2 filter*/
+FIR_Filter_t Main_stLDR2Filter = {
+		.ImpulseRespone = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
+};
+
+f32 Main_f32LDR0;
+f32 Main_f32LDR1;
+f32 Main_f32LDR2;
+
+#define PI 3.14159265359
+
+#define NUM_COEFFICIENTS 16 // Filter size
+
+float approxSin(float x) {
+    // Normalize angle to be between -2*pi and 2*pi
+    while (x < -2 * PI) x += 2 * PI;
+    while (x >= 2 * PI) x -= 2 * PI;
+
+    float result = 0;
+    float term = x;
+    int sign = 1;
+    float fact = 1;
+
+    for (int i = 1; i <= 10; i += 2) {
+        result += sign * term;
+        term *= (x * x) / ((i + 1) * (i + 2));
+        sign *= -1;
+    }
+
+    return result;
+}
+
+
+void computeImpulseResponse(float* h, int numCoefficients, float cutoffFrequency, float samplingRate) {
+    for (int n = 0; n < numCoefficients; n++) {
+        if (n == (numCoefficients-1)/2) {
+            h[n] = 2 * cutoffFrequency / samplingRate;
+        } else {
+            h[n] = (approxSin(2 * PI * cutoffFrequency * (n - (numCoefficients-1)/2) / samplingRate) /
+                   (PI * (n - (numCoefficients-1)/2)));
+        }
+    }
+}
+
+void main(void)
+{
+    float impulseResponse[NUM_COEFFICIENTS];
+
+    // Specifications
+    f32 cutoffFrequency = 100.0; // 100 Hz
+    f32 samplingRate = 1000.0;   // 1000 Hz
+
+    computeImpulseResponse(impulseResponse, NUM_COEFFICIENTS, cutoffFrequency, samplingRate);
+
+    // Print impulse response coefficients
+    for (int i = 0; i < NUM_COEFFICIENTS; i++) {
+    	Main_stLDR0Filter.ImpulseRespone[i] = impulseResponse[i];
+    	Main_stLDR1Filter.ImpulseRespone[i] = impulseResponse[i];
+    	Main_stLDR2Filter.ImpulseRespone[i] = impulseResponse[i];
+    }
+
+	uint32 Main = 1000;
+	/*Initializations*/
+	PORT_voidInit();
+	GIE_voidEnable();
+	CLCD_voidInit();
+	ADC_voidInit();
+
+	/*Initialize the LDR 0 filter*/
+	FIR_voidFilterInit(&Main_stLDR0Filter);
+
+	/*Initialize the LDR 1 filter*/
+	FIR_voidFilterInit(&Main_stLDR1Filter);
+
+	/*Initialize the LDR 2 filter*/
+	FIR_voidFilterInit(&Main_stLDR2Filter);
+
+	/*Initialize Timer 0*/
+	TIMER0_2_CFG_t Local_stTimer0;
+	Local_stTimer0.ClkSelect = TIMER0_u8SYS_CLK_BY_8;
+	Local_stTimer0.OCMode = OC_DISCONNECTED;
+	Local_stTimer0.WGM = CTC;
+	TIMER0_u8Init(&Local_stTimer0);
+	TIMER0_voidSetCompValue(250);
+	TIMERS_u8SetCallBack(TIMER0_COMP, Main_voidTimer1ISR);
+	TIMERS_u8IntEnable(TIMER0_COMP);
+
+//	/*Initialize Timer 1*/
+//	TIMER1_CFG_t Local_stTimer1 =
+//	{
+//			.ClkSelect = TIMER1_u8SYS_CLK_BY_8,
+//			.OCAMode = OC_DISCONNECTED,
+//			.OCBMode = OC_DISCONNECTED,
+//			.WGM = CTC_ICR1
+//	};
+//	TIMER1_voidSetInputCaptValue(1000);
+//	TIMERS_u8IntEnable(TIMER1_COMPA);
+//	TIMERS_u8SetCallBack(TIMER1_COMPA, Main_voidTimer1ISR);
+//	TIMER1_u8Init(&Local_stTimer1);
+
+
+	/*Define variables*/
+	uint16 Local_u8LDR0;
+	uint16 Local_u8LDR1;
+	uint8 Local_u8Temp0;
+	uint8 Local_u8Temp1;
+	uint16 Local_u16Distance0;
+	uint8 Local_u8Counter;
+//		ULTSONIC_t Local_stUltrasonic0 =
+//		{
+//				.TrigPort = DIO_u8PORTC,
+//				.TrigPin = DIO_u8PIN0
+//		};
+//
+
+
+	while(1)
+	{
+	}
+}
+
+
+void Main_voidTimer1ISR(void)
+{
+	/*Define Variables*/
+	static uint16 Local_u16Counter = 0u;
+
+	uint16 Local_u16LDR0Reading;
+	uint16 Local_u16LDR1Reading;
+	uint16 Local_u16LDR2Reading;
+
+	Local_u16Counter++;
+	if(Local_u16Counter % 40 == 0)
+	{
+		LDR_u8GetAnalogVolt(LDR_u8ADC_CH0, &Local_u16LDR0Reading);
+		LDR_u8GetAnalogVolt(LDR_u8ADC_CH1, &Local_u16LDR1Reading);
+		LDR_u8GetAnalogVolt(LDR_u8ADC_CH2, &Local_u16LDR2Reading);
+
+		Main_f32LDR0 = FIR_f32FilterUpdate(&Main_stLDR0Filter, (f32) Local_u16LDR0Reading);
+		Main_f32LDR1 = FIR_f32FilterUpdate(&Main_stLDR1Filter, (f32) Local_u16LDR1Reading);
+		Main_f32LDR2 = FIR_f32FilterUpdate(&Main_stLDR2Filter, (f32) Local_u16LDR2Reading);
+//	}
+
+//	if(Local_u16Counter == 1000)
+//	{
+				CLCD_voidClearDisplay();
+				CLCD_u8GoToXY(0, 0);
+				CLCD_voidSendDecimalNumber((sint32) Main_f32LDR0);
+				CLCD_u8GoToXY(8, 0);
+				CLCD_voidSendDecimalNumber((sint32) Local_u16LDR0Reading);
+				CLCD_u8GoToXY(0, 1);
+				CLCD_voidSendDecimalNumber(Local_u16Counter);
+				Local_u16Counter = 0;
+	}
+//	Local_u16Counter++;
+
+//	if(Local_u16Counter == 33)
+//	{
+//		DIO_u8TogglePinValue(DIO_u8PORTC, DIO_u8PIN4);
+//		Local_u16Counter = 0;
+//	}
+
+//	DIO_u8TogglePinValue(DIO_u8PORTC, DIO_u8PIN4);
+
+//	/*Increment the counter*/
+//	Local_u16Counter++;
+//	if(Local_u16Counter % 5 == 0)
+//	{
+//
+//		LDR_u8GetAnalogVolt(LDR_u8ADC_CH0, &Local_u16LDR0Reading);
+//		LDR_u8GetAnalogVolt(LDR_u8ADC_CH1, &Local_u16LDR1Reading);
+//		LDR_u8GetAnalogVolt(LDR_u8ADC_CH2, &Local_u16LDR2Reading);
+//
+//		Main_f32LDR0 = FIR_f32FilterUpdate(&Main_stLDR0Filter, (f32) Local_u16LDR0Reading);
+//		Main_f32LDR1 = FIR_f32FilterUpdate(&Main_stLDR1Filter, (f32) Local_u16LDR1Reading);
+//		Main_f32LDR2 = FIR_f32FilterUpdate(&Main_stLDR2Filter, (f32) Local_u16LDR2Reading);
+//		DIO_u8TogglePinValue(DIO_u8PORTC, DIO_u8PIN4);
+
+//	}
+////	else if(Local_u16Counter == 5000)
+//	{
+//		CLCD_voidClearDisplay();
+//		CLCD_u8GoToXY(0, 0);
+//		CLCD_voidSendDecimalNumber((sint32) Main_f32LDR0);
+//		CLCD_u8GoToXY(8, 0);
+//		CLCD_voidSendDecimalNumber((sint32) Local_u16LDR0Reading);
+//		CLCD_u8GoToXY(0, 1);
+//		CLCD_voidSendDecimalNumber(Local_u16Counter);
+//		while(1);
+////		Local_u16Counter = 0;
+//		DIO_u8TogglePinValue(DIO_u8PORTC, DIO_u8PIN4);
+//
+//	}
+////	CLCD_u8GoToXY(0, 1);
+////	CLCD_voidSendDecimalNumber((sint32) Main_f32LDR2);
+}
+
+
+//    /*Define the signal specifications variables*/
+//	f32 Local_f32ImpulseResponseArr[MAIN_FILTER_COEFFICIENTS_NUM];
+//    f32 Local_f32CutoffFrequency = 100.0;
+//    f32 Local_f32SamplingRate = 1000.0;
+//
+//    /*Compute the filter impulse response coefficients*/
+//    FIR_u8ComputeImpulseResponse(Local_f32ImpulseResponseArr, MAIN_FILTER_COEFFICIENTS_NUM, Local_f32CutoffFrequency, Local_f32SamplingRate);
+//
+//    /*Give the impulse response coefficients to the filters*/
+//    for (int i = 0; i < MAIN_FILTER_COEFFICIENTS_NUM; i++) {
+//    	Main_stLDRFilter.ImpulseRespone[i] = 0.0625;
+//    }
+//
+//	/*Initialize the LDR filter*/
+//	FIR_voidFilterInit(&Main_stLDRFilter);
+
+
