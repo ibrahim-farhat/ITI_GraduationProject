@@ -1,0 +1,5 @@
+../Src/RCC_program.c:10:9:RCC_enSetClkStatus	18
+../Src/RCC_program.c:75:9:RCC_enSetSystemClk	8
+../Src/RCC_program.c:112:9:RCC_enAHB1_EnableClk	3
+../Src/RCC_program.c:138:9:RCC_enAHB1_DisableClk	3
+../Src/RCC_program.c:165:9:RCC_enAPB2_EnableClk	3

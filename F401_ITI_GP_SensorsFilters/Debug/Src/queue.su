@@ -1,0 +1,8 @@
+../Src/queue.c:10:6:Queue_voidCircularArrayQueueInit	16	static
+../Src/queue.c:24:5:Queue_s32CircularArrayQueueIsFull	32	static
+../Src/queue.c:43:5:Queue_s32CircularArrayQueueIsEmpty	24	static
+../Src/queue.c:62:6:Queue_voidCircularArrayQueueEnqueue	32	static
+../Src/queue.c:96:6:Queue_voidCircularArrayQueueDequeueEnqueue	32	static
+../Src/queue.c:131:5:Queue_s32CircularArrayQueueDequeue	32	static
+../Src/queue.c:169:5:Queue_s32CircularArrayQueuePeek	24	static
+../Src/queue.c:190:5:Queue_s32CircularArrayQueueSize	32	static

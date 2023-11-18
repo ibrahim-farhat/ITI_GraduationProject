@@ -1,0 +1,5 @@
+../Src/RCC_program.c:10:9:RCC_enSetClkStatus	24	static
+../Src/RCC_program.c:75:9:RCC_enSetSystemClk	24	static
+../Src/RCC_program.c:112:9:RCC_enAHB1_EnableClk	24	static
+../Src/RCC_program.c:138:9:RCC_enAHB1_DisableClk	24	static
+../Src/RCC_program.c:165:9:RCC_enAPB2_EnableClk	24	static

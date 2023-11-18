@@ -1,0 +1,5 @@
+../Src/FIR_program.c:13:6:FIR_voidFilterInit	32	static
+../Src/FIR_program.c:27:7:FIR_f32FilterUpdate	32	static
+../Src/FIR_program.c:67:10:FIR_u32EMA	32	static
+../Src/FIR_program.c:73:7:ApproxSin	40	static
+../Src/FIR_program.c:102:9:FIR_enComputeImpulseResponse	40	static

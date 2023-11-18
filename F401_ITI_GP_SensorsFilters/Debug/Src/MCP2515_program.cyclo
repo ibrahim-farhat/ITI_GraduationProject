@@ -1,0 +1,14 @@
+../Src/MCP2515_program.c:39:13:MCP2515_voidChipSelect	3
+../Src/MCP2515_program.c:51:9:MCP2515_u8ReadRegister	1
+../Src/MCP2515_program.c:70:6:MCP2515_voidWriteRegister	1
+../Src/MCP2515_program.c:84:6:MCP2515_voidSetBitTiming	1
+../Src/MCP2515_program.c:91:6:MCP2515_voidReset	1
+../Src/MCP2515_program.c:101:6:MCP2515_voidChangeBits	1
+../Src/MCP2515_program.c:117:6:MCP2515_voidSetMode	2
+../Src/MCP2515_program.c:123:6:MCP2515_voidInit	2
+../Src/MCP2515_program.c:145:6:MCP2515_voidSendCANmsg	2
+../Src/MCP2515_program.c:193:6:MCP2515_voidSetRollover	1
+../Src/MCP2515_program.c:198:6:MCP2515_voidSetMask	2
+../Src/MCP2515_program.c:233:6:MCP2515_voidReceiveInit	2
+../Src/MCP2515_program.c:261:22:MCP2515_stReceiveCANmsg	3
+../Src/MCP2515_program.c:300:6:MCP2515_voidReceiveCANmsg2	2

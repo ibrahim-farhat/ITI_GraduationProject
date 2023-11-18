@@ -1,0 +1,6 @@
+../Src/GPIO_program.c:10:9:GPIO_enPinInit	15
+../Src/GPIO_program.c:128:9:GPIO_enSetPinValue	6
+../Src/GPIO_program.c:165:9:GPIO_enReadPinValue	7
+../Src/GPIO_program.c:192:9:GPIO_enTogglePinValue	6
+../Src/GPIO_program.c:218:9:GPIO_enSetPortValue	5
+../Src/GPIO_program.c:244:9:GPIO_enSetHalfPortValue	11

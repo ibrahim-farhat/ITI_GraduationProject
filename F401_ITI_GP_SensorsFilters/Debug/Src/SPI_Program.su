@@ -1,0 +1,4 @@
+../Src/SPI_Program.c:32:6:MSPI_voidInitSlave	4	static
+../Src/SPI_Program.c:36:6:MSPI_voidInitMaster	4	static
+../Src/SPI_Program.c:41:6:MSPI_voidSendRecieveDataSync	16	static
+../Src/SPI_Program.c:67:6:MSPI_voidSendRecieveDataAsync	16	static

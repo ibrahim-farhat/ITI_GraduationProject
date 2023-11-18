@@ -1,0 +1,6 @@
+../Src/GPIO_program.c:10:9:GPIO_enPinInit	24	static
+../Src/GPIO_program.c:128:9:GPIO_enSetPinValue	24	static
+../Src/GPIO_program.c:165:9:GPIO_enReadPinValue	24	static
+../Src/GPIO_program.c:192:9:GPIO_enTogglePinValue	24	static
+../Src/GPIO_program.c:218:9:GPIO_enSetPortValue	24	static
+../Src/GPIO_program.c:244:9:GPIO_enSetHalfPortValue	24	static
