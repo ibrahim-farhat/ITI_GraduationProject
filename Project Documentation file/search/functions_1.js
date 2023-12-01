@@ -1,0 +1,7 @@
+var searchData=
+[
+  ['adc_5fu8startchainconversionasynch_0',['adc_u8startchainconversionasynch',['../_a_d_c__interface_8h.html#a7767eaf544b6968084a80fcca52756ea',1,'ADC_u8StartChainConversionAsynch(ADC_ChainConv_t *Copy_pstChain):&#160;ADC_program.c'],['../_a_d_c__program_8c.html#a7767eaf544b6968084a80fcca52756ea',1,'ADC_u8StartChainConversionAsynch(ADC_ChainConv_t *Copy_pstChain):&#160;ADC_program.c']]],
+  ['adc_5fu8startconversionasynch_1',['adc_u8startconversionasynch',['../_a_d_c__interface_8h.html#a971906ef4e57479aa5b244f73235473f',1,'ADC_u8StartConversionAsynch(uint8 Copy_u8Channel, uint16 *Copy_pu16Result, void(*Copy_pvNotificationFunc)(void)):&#160;ADC_program.c'],['../_a_d_c__program_8c.html#a971906ef4e57479aa5b244f73235473f',1,'ADC_u8StartConversionAsynch(uint8 Copy_u8Channel, uint16 *Copy_pu16Result, void(*Copy_pvNotificationFunc)(void)):&#160;ADC_program.c']]],
+  ['adc_5fu8startconversionsynch_2',['adc_u8startconversionsynch',['../_a_d_c__interface_8h.html#aec15bc1221d72702e8e4b641bc6b5449',1,'ADC_u8StartConversionSynch(uint8 Copy_u8Channel, uint16 *Copy_pu16Result):&#160;ADC_program.c'],['../_a_d_c__program_8c.html#aec15bc1221d72702e8e4b641bc6b5449',1,'ADC_u8StartConversionSynch(uint8 Copy_u8Channel, uint16 *Copy_pu16Result):&#160;ADC_program.c']]],
+  ['adc_5fvoidinit_3',['adc_voidinit',['../_a_d_c__interface_8h.html#ad8e5dfad0dc1800a2a93870427dd2396',1,'ADC_voidInit(void):&#160;ADC_program.c'],['../_a_d_c__program_8c.html#ad8e5dfad0dc1800a2a93870427dd2396',1,'ADC_voidInit(void):&#160;ADC_program.c']]]
+];
